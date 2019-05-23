@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
       $table->string('card_number', 16)->nullable()->default(null);
       $table->string('remember_token', 64)->nullable();
       $table->boolean('gender')->default(1)->nullable();
-      $table->boolean('should_check_permissions')->default(false);
+      $table->boolean('is_admin')->default(false);
       $table->timestamps();
     });
   }

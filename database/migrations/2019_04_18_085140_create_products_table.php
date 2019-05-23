@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
       $table->boolean('published')->default(false);
       $table->integer('price');
       $table->integer('real_price');
-      $table->tinyInteger('discount')->nullable();
+      $table->tinyInteger('discount')->unsigned()->nullable()->default(null);
       $table->mediumInteger('qty');
       $table->timestamps();
 

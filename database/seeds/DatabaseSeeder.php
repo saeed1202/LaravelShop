@@ -18,7 +18,9 @@ class DatabaseSeeder extends Seeder
 //    $this->call(AttributeTypes::class);
 //    $this->call(Attribute::class);
 //    $this->call(AttributeItem::class);
-    $this->call(CartStatus::class);
-    $this->call(States::class);
+//    $this->call(CartStatus::class);
+//    $this->call(States::class);
+//    $this->call(Permissions::class);
   }
+
 }

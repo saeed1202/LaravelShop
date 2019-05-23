@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
-  protected $hidden = ['created_at', 'updated_at', 'order_status_id', 'address_id', 'customer_id'];
+  /**
+   * @var array
+   */
+  protected $hidden = ['created_at', 'updated_at'];
 
+  protected $fillable = ['address_id'];
 
   /**
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

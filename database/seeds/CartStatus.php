@@ -35,6 +35,7 @@ class CartStatus extends Seeder
     \App\OrderStatus::create([
         'name' => 'توسط کاربر لغو شد',
         'order' => 6,
+        'deletable' => true
     ]);
     \App\OrderStatus::create([
         'name' => 'توسط سیستم لغو شد',

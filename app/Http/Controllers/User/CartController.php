@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use App\Cart;
+use App\Http\Controllers\Controller;
 use App\OrderStatus;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
 
-  private $order_state = 1;
+  private $state_order = 1;
 
   /**
    * Display a listing of the resource.
@@ -37,7 +37,7 @@ class CartController extends Controller
   public function store()
   {
     $cart = auth()->user()->carts()->create([
-        'order_status_id' => OrderStatus::where('order', $this->order_state)->first()->id
+        'order_status_id' => OrderStatus::where('order', $this->state_order)->first()->id
     ]);
 
     return response()->json($cart);
@@ -51,7 +51,10 @@ class CartController extends Controller
    */
   public function show($id)
   {
-    //
+    $cart = Cart::where('id', $id)->with('products', 'status', 'address')->first();
+    $this->authorize('view', $cart);
+
+    return response()->json($cart);
   }
 
   /**
@@ -74,6 +77,36 @@ class CartController extends Controller
    */
   public function update(Request $request, $id)
   {
-    //
+    $cart = $request->only(['products', 'address_id']);
+    $validation = Validator::make(
+        $cart,
+        [
+            'products' => 'array',
+            'address_id' => 'numeric'
+        ]
+    );
+    $cart = Cart::find($id);
+    $this->authorize('update', $cart);
+
+
+    return $cart->products()->sync($request->products);
+
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int $id
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy($id)
+  {
+    $cart = Cart::find($id);
+    $this->authorize('delete', $cart);
+    return response()->json([
+        'address' => $cart,
+        'deleted' => (bool)$cart->delete(),
+        'by' => auth()->user()
+    ]);
   }
 }

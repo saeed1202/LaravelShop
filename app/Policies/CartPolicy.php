@@ -4,80 +4,76 @@ namespace App\Policies;
 
 use App\User;
 use App\Cart;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CartPolicy
 {
-    use HandlesAuthorization;
+  private $view = 'cart.view';
+  private $delete = 'cart.delete';
+  private $update = 'cart.edit';
+  private $create = 'cart.new';
+  private $should_delete = 'cart.should.delete';
 
-    /**
-     * Determine whether the user can view the cart.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Cart  $cart
-     * @return mixed
-     */
-    public function view(User $user, Cart $cart)
-    {
-        //
-    }
+  /**
+   * Determine whether the user can view the address.
+   *
+   * @param  \App\User $user
+   * @param  \App\Address $address
+   * @return mixed
+   */
+  public function view(User $user, Cart $cart)
+  {
+    if (!$user->is_admin) return $user->id === $cart->user_id;
 
-    /**
-     * Determine whether the user can create carts.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        //
-    }
+    return $user->roles()->first()->permissions()->where('name', $this->view)->first();
+  }
 
-    /**
-     * Determine whether the user can update the cart.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Cart  $cart
-     * @return mixed
-     */
-    public function update(User $user, Cart $cart)
-    {
-        //
-    }
+  /**
+   * Determine whether the user can create addresses.
+   *
+   * @param  \App\User $user
+   * @return mixed
+   */
+  public function create(User $user)
+  {
+    if (!$user->is_admin) return true;
 
-    /**
-     * Determine whether the user can delete the cart.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Cart  $cart
-     * @return mixed
-     */
-    public function delete(User $user, Cart $cart)
-    {
-        //
-    }
 
-    /**
-     * Determine whether the user can restore the cart.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Cart  $cart
-     * @return mixed
-     */
-    public function restore(User $user, Cart $cart)
-    {
-        //
-    }
+    return $user->roles()->first()->permissions()->where('name', $this->create)->first();
+  }
 
-    /**
-     * Determine whether the user can permanently delete the cart.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Cart  $cart
-     * @return mixed
-     */
-    public function forceDelete(User $user, Cart $cart)
-    {
-        //
-    }
+  /**
+   * Determine whether the user can update the address.
+   *
+   * @param  \App\User $user
+   * @param  \App\Address $address
+   * @return mixed
+   */
+  public function update(User $user, Cart $cart)
+  {
+    if (!$user->is_admin) return $user->id === $cart->user_id;
+
+
+    return $user->roles()->first()->permissions()->where('name', $this->update)->first();
+
+
+  }
+
+  /**
+   * Determine whether the user can delete the address.
+   *
+   * @param  \App\User $user
+   * @param  \App\Address $address
+   * @return mixed
+   */
+  public function delete(User $user, Cart $cart)
+  {
+
+    if (!$user->is_admin) return ($user->id === $cart->user_id && $cart->status()->first()->deletable);
+
+    if ($cart->status()->first()->deletable)
+      return $user->roles()->first()->permissions()->where('name', $this->delete)->first();
+    else
+      return $user->roles()->first()->permissions()->where('name', $this->should_delete)->first();
+
+  }
 }

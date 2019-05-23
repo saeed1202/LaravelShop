@@ -3,20 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Address;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class AddressController extends Controller
 {
 
-  /**
-   * AddressController constructor.
-   */
-  public function __construct()
-  {
-    $this->authorizeResource(Address::class);
-  }
 
   /**
    * Display a listing of the resource.
@@ -37,6 +30,7 @@ class AddressController extends Controller
    */
   public function store(Request $request)
   {
+    $this->authorize('create', Address::class);
     $newAddress = $request->only(['address', 'full_name', 'phone', 'postal_code', 'city_id']);
     $validation = Validator::make(
         $newAddress,
@@ -69,10 +63,11 @@ class AddressController extends Controller
    */
   public function show($id)
   {
+
     $address = Address::where('id', $id)->with('city', 'city.state')->first();
-    $this->authorize('view',$address);
-    if (!$address) $address = false;
-    return response()->json($address, $address ? 200 : 400);
+    $this->authorize('view', $address);
+
+    return response()->json($address);
   }
 
 

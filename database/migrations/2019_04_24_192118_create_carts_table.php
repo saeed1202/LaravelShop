@@ -19,7 +19,7 @@ class CreateCartsTable extends Migration
       $table->tinyInteger('order_status_id')->unsigned();
       $table->integer('address_id')->unsigned()->nullable();
       $table->text('address_object')->nullable()->default(null);
-      $table->bigInteger('payment_code')->nullable()->default(null);
+      $table->bigInteger('payment_id')->nullable()->default(null);
       $table->bigInteger('total_price')->unsigned()->nullable()->default(null);
       $table->timestamps();
 

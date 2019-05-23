@@ -15,7 +15,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('', function () {
-  return \App\State::with('cities')->get();
+  return \App\Cart::first()->status()->first()->deletable;
 });
 
 
@@ -24,13 +24,15 @@ Route::name('unauthorized')->any('unauthorized', function () {
 
 });
 
+Route::resource('cart', 'User\CartController');
+
+
 Route::middleware('auth:api')->name('user.')->prefix('user')->group(function () {
 
   Route::name('me')->get('me', '');
 
   Route::resource('address', 'User\AddressController');
   Route::resource('cart', 'User\CartController');
-
 
 });
 
