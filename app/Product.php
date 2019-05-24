@@ -43,19 +43,21 @@ class Product extends Model
    */
   public function categories()
   {
-    return $this->hasMany(Category::class);
+    return $this->belongsToMany(Category::class);
   }
 
+
   /**
-   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
    */
   public function attributes()
   {
     return $this->belongsToMany(Attribute::class, 'attribute_item_product');
   }
 
+
   /**
-   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
    */
   public function carts()
   {

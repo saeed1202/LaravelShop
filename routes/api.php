@@ -15,7 +15,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('', function () {
-  return \App\Cart::first()->status()->first()->deletable;
+  return \route('me');
 });
 
 
@@ -24,17 +24,22 @@ Route::name('unauthorized')->any('unauthorized', function () {
 
 });
 
-Route::resource('cart', 'User\CartController');
+Route::resource('product', 'ProductController');
 
 
-Route::middleware('auth:api')->name('user.')->prefix('user')->group(function () {
+Route::middleware('auth:api')
+    ->name('user.')
+    ->prefix('user')
+    ->group(function () {
 
-  Route::name('me')->get('me', '');
+      Route::name('updateProfile')->get('profile', 'User\UserController@update');
+      Route::name('me')->get('me', 'User\UserController@me');
 
-  Route::resource('address', 'User\AddressController');
-  Route::resource('cart', 'User\CartController');
 
-});
+      Route::resource('address', 'User\AddressController');
+      Route::resource('cart', 'User\CartController');
+
+    });
 
 
 Route::name('auth.')->prefix('auth')->group(function () {
