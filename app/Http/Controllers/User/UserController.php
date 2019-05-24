@@ -16,19 +16,20 @@ class UserController extends Controller
    * @param  int $id
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, $id)
+  public function update(Request $request)
   {
     $profile = $request->only([
-        'name', 'family', 'national_code', 'phone', 'card_number'
+        'name', 'family', 'national_code', 'phone', 'card_number', 'gender'
     ]);
     $validation = Validator::make(
         $profile,
         [
-            'name' => 'min:4|max:16|string|nullable',
+            'name' => 'min:3|max:16|string|nullable',
             'family' => 'min:4|max:16|string|nullable',
             'card_number' => 'nullable|numeric|digits:16',
             'phone' => 'nullable|numeric|digits:10',
-            'national_code' => 'nullable|numeric|digits:10'
+            'national_code' => 'nullable|numeric|digits:10',
+            'gender' => 'nullable|boolean'
         ]
     );
     if ($validation->fails()) return response()->json($validation->errors());

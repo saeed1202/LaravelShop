@@ -32,7 +32,7 @@ Route::middleware('auth:api')
     ->prefix('user')
     ->group(function () {
 
-      Route::name('updateProfile')->get('profile', 'User\UserController@update');
+      Route::name('updateProfile')->put('profile', 'User\UserController@update');
       Route::name('me')->get('me', 'User\UserController@me');
 
 
